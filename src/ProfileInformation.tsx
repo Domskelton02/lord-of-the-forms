@@ -1,20 +1,25 @@
 import { UserInformation } from "./types";
+import { allCities } from './utils/all-cities';
 
-export const InfoRow = ({ label, value }: { label: string; value: string }) => {
-  return (
-    <div>
-      <span style={{ marginRight: 5 }}>
-        <b>{label}:</b>
-      </span>
-      <span>{value}</span>
-    </div>
-  );
-};
-export const ProfileInformation = ({
-  userData,
-}: {
+interface InfoRowProps {
+  label: string;
+  value: string;
+}
+
+export const InfoRow = ({ label, value }: InfoRowProps) => (
+  <div>
+    <span style={{ marginRight: 5 }}>
+      <b>{label}:</b>
+    </span>
+    <span>{value}</span>
+  </div>
+);
+
+interface ProfileInformationProps {
   userData: UserInformation | null;
-}) => {
+}
+
+export const ProfileInformation = ({ userData }: ProfileInformationProps) => {
   if (!userData) {
     return (
       <>
@@ -27,7 +32,12 @@ export const ProfileInformation = ({
       </>
     );
   }
+
   const { email, firstName, lastName, phone, city } = userData;
+  const formattedPhone = `${phone.slice(0, 2)}-${phone.slice(2, 4)}-${phone.slice(4, 6)}-${phone.slice(6)}`;
+
+  const cityValue = allCities.includes(city) ? city : 'Invalid city';
+
   return (
     <>
       <u>
@@ -37,9 +47,8 @@ export const ProfileInformation = ({
         <InfoRow label="Email" value={email} />
         <InfoRow label="First Name" value={firstName} />
         <InfoRow label="Last Name" value={lastName} />
-        <InfoRow label="City" value={city} />
-        {/* You will need to format the string "nnnnnnn" as "nn-nn-nn-n" */}
-        <InfoRow label="Phone" value={"12-34-56-7"} />
+        <InfoRow label="State" value={cityValue} />
+        <InfoRow label="Phone" value={formattedPhone} />
       </div>
     </>
   );
